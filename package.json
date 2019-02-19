@@ -1,0 +1,14 @@
+{
+  "name": "kontra-game",
+  "version": "1.0.0",
+  "description": "kontra game api test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Julien Regnault",
+  "license": "MIT",
+  "dependencies": {
+    "kontra": "^5.4.0"
+  }
+}
