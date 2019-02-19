@@ -1,3 +1,7 @@
+/**
+ * tutorial: https://github.com/straker/kontra/blob/master/examples/galaxian/js/galaxian.js
+ */
+
 kontra.init();
 
 let sprite = kontra.sprite({
@@ -26,21 +30,20 @@ let enemyBullets = kontra.pool({
 });
 
 /**
-* Spawn a new wave of enemies.
+* Spawn a new wave of enemies (6 enemies)
 */
 function spawnWave() {
     var width = 10;
-    var height = 10;
+    
     var x = 100;
     var y = -10;
-    var spacer = y * 1.5;
 
     for (var i = 1; i <= 6; i++) {
       enemies.get({
         x: x,
         y: y,
-        width: width,
-        height: height,
+        width: 10,
+        height: 10,
         dy: 2,
         // image: kontra.assets.images.enemy,
         color: 'red',
@@ -66,15 +69,27 @@ function spawnWave() {
             this.dx = -this.speed;
             this.y -= 5;
           }
+
+          // randomly fire bullets
+          if (Math.floor(Math.random()*101)/100 < .01) {
+            enemyBullets.get({
+              width: 5,
+              height: 5,
+              x: this.x + this.width / 2,
+              y: this.y + this.height,
+              dy: 2.5,
+
+              // image: kontra.assets.images.bullet_enemy,
+              color: 'orange',
+
+              ttl: 150,
+              type: 'hostile'
+            });
+          }
         },
       });
 
       x += width + 25;
-
-      if (i % 6 === 0) {
-        x = 100;
-        y += spacer;
-      }
     }
 }
 
