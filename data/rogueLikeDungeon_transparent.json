@@ -1,0 +1,15 @@
+{ "columns":29,
+ "image":"../imgs/roguelikeDungeon_transparent.png",
+ "imageheight":305,
+ "imagewidth":492,
+ "margin":1,
+ "name":"rogueLikeDungeon_transparent",
+ "spacing":1,
+ "tilecount":522,
+ "tiledversion":"1.2.2",
+ "tileheight":16,
+ "tilewidth":16,
+ "transparentcolor":"#ff00ff",
+ "type":"tileset",
+ "version":1.2
+}
