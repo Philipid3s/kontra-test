@@ -4,28 +4,54 @@
 
 kontra.init();
 
-// set default asset paths
-// kontra.assets.imagePath = 'imgs/';
-
 // load assets
 
 kontra.assets.load(
   // tilesets
-  '../imgs/roguelikeDungeon_transparent.png', '../data/marginTiles.json', '../data/rogueLikeDungeon_transparent.json'
+  '../imgs/roguelikeDungeon_transparent.png', '../data/marginTiles.json', '../data/rogueLikeDungeon_transparent.json',
+  // sprites
+  '../imgs/warrior_m.png'
 ).then(function() {
 
   let tileEngine = kontra.tileEngine(kontra.assets.data['../data/marginTiles']);
-  // tileEngine.render();
 
-  console.log(tileEngine);
+  let spriteSheet = kontra.spriteSheet({
+    image: kontra.assets.images['../imgs/warrior_m.png'],
+    frameWidth: 32,
+    frameHeight: 36,
+    animations: {
+      idle: {
+        frames: 7  // single frame
+      },
+    }
+  });
+
+  spriteSheet.createAnimations({
+    // create a named animation: walk right
+    walkRight: {
+      frames: '3..5',  // frames 3 through 5
+      frameRate: 30,
+    },
+    walkLeft: {
+      frames: '9..11',  
+      frameRate: 30,
+    },
+    walkUp: {
+      frames: '0..2',
+      frameRate: 30
+    },
+    walkDown: {
+      frames: '6..8',
+      frameRate: 30
+    }
+  });
 
   let player = kontra.sprite({
       x: 50,        // starting x,y position of the sprite
       y: 50,
-      color: 'blue',  // fill color of the sprite rectangle
-      width: 20,     // width and height of the sprite rectangle
-      height: 20,
-      // dx: 2          // move the sprite 2px to the right every frame
+      // color: 'blue',  // fill color of the sprite rectangle
+
+      animations: spriteSheet.animations
   });
   
   let limitX = kontra.canvas.width - player.width;
@@ -110,11 +136,13 @@ function spawnWave() {
 
 let loop = kontra.gameLoop({  // create the main game loop
     update: function() {        // update the game state
-      player.update();
+      // player.update();
 
       enemies.update();
       enemyBullets.update();
   
+      // player.animations.idle.update();
+
       // wrap the sprites position when it reaches
       // the edge of the screen
       if (player.x > limitX) {
@@ -131,16 +159,22 @@ let loop = kontra.gameLoop({  // create the main game loop
         player.y = 0;
       }
 
+      spriteSheet.animations.idle.update();
+      
       if (kontra.keys.pressed('right')) {
+        spriteSheet.animations.walkRight.update();
         player.x += 2;
       }
       if (kontra.keys.pressed('left')) {
+        spriteSheet.animations.walkLeft.update();
         player.x -= 2;
       }
       if (kontra.keys.pressed('up')) {
+        spriteSheet.animations.walkUp.update();
         player.y -= 2;
       }
       if (kontra.keys.pressed('down')) {
+        spriteSheet.animations.walkDown.update();
         player.y += 2;
       }
       
@@ -168,10 +202,24 @@ let loop = kontra.gameLoop({  // create the main game loop
       // background
       tileEngine.render();
 
-      player.render();
-
       enemies.render();
       enemyBullets.render();
+
+      if (kontra.keys.pressed('right')) {
+        spriteSheet.animations.walkRight.render({x: player.x, y: player.y});
+      }
+      else if (kontra.keys.pressed('left')) {
+        spriteSheet.animations.walkLeft.render({x: player.x, y: player.y});
+      }
+      else if (kontra.keys.pressed('up')){
+        spriteSheet.animations.walkUp.render({x: player.x, y: player.y});
+      }
+      else if (kontra.keys.pressed('down')){
+        spriteSheet.animations.walkDown.render({x: player.x, y: player.y});
+      }
+      else {
+        spriteSheet.animations.idle.render({x: player.x, y: player.y});
+      }
     }
 });
   
